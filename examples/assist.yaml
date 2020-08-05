@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: assist
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: assist
+  template:
+    metadata:
+      name: assist
+      labels:
+        name: assist
+    spec:
+      containers:
+        - name: assist-construct
+          image: leofaudji/aa-setup:2.0
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: assist-service
+  labels:
+    l1: component
+    l2: php-editor
+    l3: assist-myadmin
+spec:
+  type: NodePort
+  selector:
+    name: assist
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30027
